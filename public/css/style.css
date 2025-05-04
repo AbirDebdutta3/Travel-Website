@@ -1,0 +1,123 @@
+body{
+
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+ 
+.container{
+    flex: 1;
+}
+
+.navbar{
+    background-color: white;
+    height: 5rem;
+}
+.fa-solid {
+    font-size: 2rem;
+    color: rgb(229, 47, 47);
+}
+.nav-link{
+    color: #222222 !important;
+}
+
+
+
+    /* Footer */
+
+    
+.f-info-links a{
+    text-decoration: none;
+    color: #222222;
+}
+.f-info-links a:hover{
+    text-decoration: underline;
+}
+.f-info-links, .f-info-socials, .f-info-brand{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.f-info-socials i{
+    font-size: 1.5rem;
+    margin-right: 2rem;
+}
+
+.f-info{
+    text-align: center;
+    display: flex;
+    height: 7rem;
+    background-color: #ebebeb;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: space-evenly;
+}
+
+    /*card*/
+
+    .listing-card {
+        border: none !important;
+        margin-bottom:2rem ; 
+    }
+       .card-img-top{
+        border-radius:1rem  !important;
+        width: 100% !important;
+        object-fit: cover !important;    
+       }
+       .card-body{
+        padding: 0 !important;
+       }
+         .card-text p{
+            font-weight:400  !important;
+         }
+
+         .listing-link{
+            text-decoration: none !important;
+            color: #222222 !important;
+         }
+
+         .card-img-overlay{
+            opacity: 0 !important;
+         }
+
+            .card:hover .card-img-overlay{
+                opacity: 0.15 !important;
+                background-color: white;
+                transition: 0.5s;
+            }
+
+            /* button */
+            .btn{
+                background-color: #fe424d !important;
+                border: none !important;
+            }
+            .edit-btn{
+                background-color: #fe424d !important;
+                border: none !important;
+            }
+            .edit-btn a{
+                text-decoration: none !important;
+                color: white !important;
+            }
+            .edit-btn{
+                border: none !important;
+            }
+            .delete-btn{
+                background-color: #000000 !important;
+                border: none !important;
+            }
+            .comment-btn{
+                background-color: #000000 !important;
+                border: none !important;
+            }
+            .delete-btn{    
+                color: white !important;
+                background-color: #000000 !important;
+                border: none !important;
+                border-radius: 0.3rem !important;
+            }
+            /*show*/
+           
+                
