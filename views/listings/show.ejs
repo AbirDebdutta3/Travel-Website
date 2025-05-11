@@ -4,10 +4,11 @@
   <div class="row justify-content-center">
     <div class="col-md-6 col-lg-5">
       <h3 class="mb-3"><%= listing.title %></h3>
-      
+
       <div class="card listing-card show-card mb-3">
         <img src="<%= listing.image.url %>" class="card-img-top" alt="listing image">
         <div class="card-body">
+          <i>Owned By <%= listing.owner.username %></i>
           <p><%= listing.description %></p>
           <p>&#8377;<%= listing.price.toLocaleString("en-IN") %></p>
           <p><%= listing.location %></p>
@@ -15,17 +16,20 @@
         </div>
       </div>
 
-      <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark edit-btn mb-2">Edit This Listing</a>
+      <% if(currentUser && currentUser._id.equals(listing.owner._id)) { %>
+        <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark edit-btn mb-2">Edit This Listing</a>
+        <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
+          <button type="submit" class="btn btn-dark delete-btn mb-4">Delete</button>
+        </form>
+      <% } %>
 
-      <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
-        <button type="submit" class="btn btn-dark delete-btn mb-4">Delete</button>
-      </form>
     </div>
   </div>
 
   <hr>
 
   <!-- Review Form -->
+   <%if (currentUser) { %>
   <div class="row justify-content-center">
     <div class="col-md-6 col-lg-5">
       <h3 class="mb-3">Leave a Comment</h3>
@@ -42,6 +46,7 @@
         </div>
         <button class="btn btn-dark comment-btn mt-2">Submit</button>
       </form>
+      <% } %>
     </div>
   </div>
 
@@ -52,13 +57,15 @@
     <div class="col-md-6 col-lg-5">
       <h3 class="mb-3">All Reviews</h3>
       <% for (let review of listing.reviews) { %>
-        <div class="card  mb-3">
+        <div class="card mb-3">
           <div class="card-body mt-2 mb-2 ms-3">
-            <h5>John Deo</h5>
+            <h5> <%= review.author.username %></h5>
             <h6 class="card-title">Rating: <%= review.rating %></h6>
             <p class="card-text"><%= review.comment %></p>
           </div>
-          <form action="/listings/<%= listing._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST"  class="ms-3 mb-2"><button class= "delete-btn" >Delete</button></form>
+          <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST" class="ms-3 mb-2">
+            <button class="delete-btn btn btn-sm btn-outline-danger">Delete</button>
+          </form>
         </div>
       <% } %>
     </div>
