@@ -4,16 +4,14 @@ module.exports.listingSchema = Joi.object({
     listing: Joi.object({
         title: Joi.string().required(),
         description: Joi.string().required(),
-        image: Joi.object({
-            filename: Joi.string(),
-            url: Joi.string().required(),
-        }).required(),
+        image: Joi.any(), // ✅ Let the controller handle image from Multer
         price: Joi.number().required(),
         location: Joi.string().required(),
         country: Joi.string().required(),
-        
-    })
+        category: Joi.string().valid('mountains', 'farms', 'beaches', 'castles', 'camping', 'trending', 'rooms', 'iconic-cities', 'amazing-pools', 'arctic', 'dome', 'boat').required()
+    }).required()
 });
+
 
 module.exports.reviewSchema = Joi.object({
     review: Joi.object({

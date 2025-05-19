@@ -1,123 +1,239 @@
-body{
-
+body {
     font-family: "Plus Jakarta Sans", sans-serif !important;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
- 
-.container{
+
+.container {
     flex: 1;
 }
 
-.navbar{
+.navbar {
     background-color: white;
     height: 5rem;
 }
+
 .fa-solid {
     font-size: 2rem;
     color: rgb(229, 47, 47);
 }
-.nav-link{
+
+.nav-link {
     color: #222222 !important;
 }
 
-
-
-    /* Footer */
-
-    
-.f-info-links a{
-    text-decoration: none;
-    color: #222222;
-}
-.f-info-links a:hover{
-    text-decoration: underline;
-}
-.f-info-links, .f-info-socials, .f-info-brand{
+/* Footer */
+footer {
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: #ebebeb;
+    left: 0;
+    right: 0;
+    position: relative;
 }
-.f-info-socials i{
-    font-size: 1.5rem;
-    margin-right: 2rem;
-}
-
-.f-info{
+.f-info {
     text-align: center;
     display: flex;
     height: 7rem;
     background-color: #ebebeb;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: space-evenly;
+    align-items: center;
+}
+.f-info-links, .f-info-socials, .f-info-brand {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.f-info-socials i {
+    font-size: 1.5rem;
+    margin-right: 2rem;
+}
+.f-info-links a {
+    text-decoration: none;
+    color: #222222;
+    margin: 0 0.5rem;
+}
+.f-info-links a:hover {
+    text-decoration: underline;
 }
 
-    /*card*/
+/* Card grid spacing */
+.listing-col {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-bottom: 2rem;
+}
 
-    .listing-card {
-        border: none !important;
-        margin-bottom:2rem ; 
+/* Card styles */
+.listing-card {
+    border: none !important;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.card-img-top {
+    border-radius: 1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+.card-body {
+    padding: 0 !important;
+}
+.card-text p {
+    font-weight: 400 !important;
+}
+.listing-link {
+    text-decoration: none !important;
+    color: #222222 !important;
+    display: block;
+    height: 100%;
+}
+
+/* Card hover overlay */
+.card {
+    position: relative;
+}
+.card-img-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background-color: white;
+    pointer-events: none;
+    transition: opacity 0.5s, background-color 0.5s;
+}
+.card:hover .card-img-overlay {
+    opacity: 0.15;
+}
+
+/* Buttons */
+.btn,
+.edit-btn {
+    background-color: #fe424d !important;
+    border: none !important;
+    color: white !important;
+}
+.edit-btn a {
+    text-decoration: none !important;
+    color: white !important;
+}
+.delete-btn,
+.comment-btn {
+    background-color: #000000 !important;
+    border: none !important;
+    color: white !important;
+    border-radius: 0.3rem !important;
+}
+
+.navbar-nav .nav-link {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+/* Ensure collapsed menu has white background */
+.navbar-collapse {
+    background-color: white;
+    z-index: 1000; /* So it sits above content */
+    padding: 1rem;
+}
+@media (max-width: 768px) {
+    .navbar-collapse {
+        background-color: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
     }
-       .card-img-top{
-        border-radius:1rem  !important;
-        width: 100% !important;
-        object-fit: cover !important;    
-       }
-       .card-body{
-        padding: 0 !important;
-       }
-         .card-text p{
-            font-weight:400  !important;
-         }
+}
+  /* Navbar */
+        .navbar {
+            background-color: white;
+        }
 
-         .listing-link{
-            text-decoration: none !important;
+        .navbar-collapse {
+            background-color: white;
+            z-index: 1000;
+        }
+
+        .navbar-nav .nav-link {
+            margin-left: 1rem;
+            margin-right: 1rem;
             color: #222222 !important;
-         }
+        }
 
-         .card-img-overlay{
-            opacity: 0 !important;
-         }
+        .main-logo {
+            color: rgb(229, 47, 47);
+            font-size: 2rem;
+        }
 
-            .card:hover .card-img-overlay{
-                opacity: 0.15 !important;
-                background-color: white;
-                transition: 0.5s;
-            }
+        /* Filters */
+         #filters {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem;
+      border-bottom: 1px solid #e2e2e2;
+      background-color: #f8f8f8;
+    }
 
-            /* button */
-            .btn{
-                background-color: #fe424d !important;
-                border: none !important;
-            }
-            .edit-btn{
-                background-color: #fe424d !important;
-                border: none !important;
-            }
-            .edit-btn a{
-                text-decoration: none !important;
-                color: white !important;
-            }
-            .edit-btn{
-                border: none !important;
-            }
-            .delete-btn{
-                background-color: #000000 !important;
-                border: none !important;
-            }
-            .comment-btn{
-                background-color: #000000 !important;
-                border: none !important;
-            }
-            .delete-btn{    
-                color: white !important;
-                background-color: #000000 !important;
-                border: none !important;
-                border-radius: 0.3rem !important;
-            }
-            /*show*/
-           
-                
+    .filter {
+      flex: 0 0 auto;
+      text-align: center;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      min-width: 80px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .filter:hover {
+      background-color: #ffffff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .filter i {
+      font-size: 1.5rem;
+      color: #fe424d;
+    }
+
+    .filter p {
+      margin-top: 0.25rem;
+      font-size: 0.9rem;
+      color: #333;
+    }
+
+    #filters::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    #filters::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 4px;
+    }
+
+    /* Responsive filters layout for very small screens */
+    @media (max-width: 576px) {
+      .filter {
+        min-width: 70px;
+        font-size: 0.8rem;
+      }
+
+      .filter i {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .navbar-brand i {
+        font-size: 1.5rem;
+      }
+    }
+    .active-filter {
+  border-bottom: 2px solid #007bff;
+  font-weight: bold;
+}
+ #filters a {
+    text-decoration: none;
+ }
