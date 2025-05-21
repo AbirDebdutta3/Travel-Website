@@ -5,7 +5,6 @@ const { saveRedirectUrl } = require("../middleware.js");
 module.exports.renderSignUpForm =  (req, res) => { 
    // res.send("User Profile Page");
    res.render("./users/signup.ejs");
-
 };
 
 module.exports.signUp= async (req, res) => {
@@ -26,7 +25,6 @@ module.exports.signUp= async (req, res) => {
       res.redirect("/signup");
    }
 };
-
 
 module.exports.renderLoginForm =  (req,res)=>{
    res.render("./users/login.ejs");

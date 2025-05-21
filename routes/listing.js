@@ -2,11 +2,13 @@ const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utilis/wrapAsync.js");
 const { validateListing, isLoggedIn, isOwner } = require("../middleware.js");
-const Listing = require("../models/listing.js");
 const listingController = require("../controllers/listing.js");
 const multer = require("multer");
 const {storage} = require("../cloudConfig.js");
 const upload = multer({storage});
+
+// Search route - must be before :id routes
+router.get("/search", wrapAsync(listingController.searchListings));
 
 // New route
 router.get("/new", isLoggedIn, listingController.renderNewForm);

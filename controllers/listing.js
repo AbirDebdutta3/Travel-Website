@@ -4,9 +4,9 @@ module.exports.index = async (req, res) => {
     const { sort } = req.query;
     let allListings;
     
-    if (sort === 'price-low-to-high') {
+    if (sort === 'price-asc') {
         allListings = await Listing.find({}).populate("owner").sort({ price: 1 });
-    } else if (sort === 'price-high-to-low') {
+    } else if (sort === 'price-desc') {
         allListings = await Listing.find({}).populate("owner").sort({ price: -1 });
     } else {
         allListings = await Listing.find({}).populate("owner");
@@ -28,7 +28,8 @@ module.exports.showListing = async (req, res) => {
         .populate({
             path: "reviews",
             populate: {
-                path: "author"
+                path: "author",
+                select: "username"
             }
         })
         .populate("owner");
@@ -108,9 +109,9 @@ module.exports.filterByCategory = async (req, res) => {
     const { sort } = req.query;
     
     let listings;
-    if (sort === 'price-low-to-high') {
+    if (sort === 'price-asc') {
         listings = await Listing.find({ category: category }).populate("owner").sort({ price: 1 });
-    } else if (sort === 'price-high-to-low') {
+    } else if (sort === 'price-desc') {
         listings = await Listing.find({ category: category }).populate("owner").sort({ price: -1 });
     } else {
         listings = await Listing.find({ category: category }).populate("owner");
@@ -120,5 +121,32 @@ module.exports.filterByCategory = async (req, res) => {
         listings,
         category,
         currentSort: sort || 'default'
+    });
+};
+
+module.exports.searchListings = async (req, res) => {
+    const { q } = req.query;
+    const searchQuery = q || '';
+    
+    if (!searchQuery) {
+        return res.redirect('/listings');
+    }
+
+    // Create a regex pattern for case-insensitive search
+    const searchRegex = new RegExp(searchQuery, 'i');
+    
+    // Search in title, location, and country
+    const listings = await Listing.find({
+        $or: [
+            { title: searchRegex },
+            { location: searchRegex },
+            { country: searchRegex }
+        ]
+    }).populate("owner");
+
+    res.render("./listings/index.ejs", { 
+        allListings: listings,
+        searchQuery: searchQuery,
+        currentSort: 'default'
     });
 };

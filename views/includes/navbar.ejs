@@ -12,24 +12,43 @@
         </button>
 
         <!-- Collapsible Content -->
-        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <!-- Left Side Links -->
-            <div class="navbar-nav">
+            <div class="navbar-nav me-auto">
                 <a class="nav-link" href="/listings">Explore</a>
-                <a class="nav-link" href="/listings/new">Home</a>
+                <% if (currentUser && currentUser.constructor.modelName === 'User') { %>
+                    <a class="nav-link" href="/listings/new">Add Listing</a>
+                <% } %>
             </div>
 
+            <!-- Search Bar - Available to all users -->
+            <% if(currentUser){ %>
+            <form class="d-flex mx-auto my-2 my-md-0 search-form" action="/listings/search" method="GET">
+                <div class="input-group">
+                    <input class="form-control" type="search" name="q" 
+                        placeholder="Search destinations" 
+                        aria-label="Search" 
+                        value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+                    <button class="btn btn-dark" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </form>
+            <% } %>
+
             <!-- Right Side Auth Links -->
-           <div class="navbar-nav">
-  <% if (!currentUser) { %>
-    <a class="nav-link" href="/signup"><b>SignUp</b></a>
-    <% if (currentPath !== '/login') { %>
-      <a class="nav-link" href="/login"><b>Login</b></a>
-    <% } %>
-  <% } else { %>
-    <a class="nav-link" href="/logout"><b>Logout</b></a>
-  <% } %>
-</div>
+            <div class="navbar-nav ms-auto">
+                <% if (!currentUser) { %>
+                    <a class="nav-link" href="/customer/signup"><b>Customer SignUp</b></a>
+                    <a class="nav-link" href="/signup"><b>Owner SignUp</b></a>
+                    <% if (currentPath !== '/login' && currentPath !== '/customer/login') { %>
+                        <a class="nav-link" href="/customer/login"><b>Customer Login</b></a>
+                        <a class="nav-link" href="/login"><b>Owner Login</b></a>
+                    <% } %>
+                <% } else { %>
+                    <a class="nav-link" href="/logout"><b>Logout</b></a>
+                <% } %>
+            </div>
         </div>
     </div>
 </nav>

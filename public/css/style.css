@@ -237,3 +237,53 @@ footer {
  #filters a {
     text-decoration: none;
  }
+
+/* Search Form Styles */
+.search-form {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.search-form .input-group {
+    width: 100%;
+}
+
+.search-form .form-control {
+    height: 40px;
+    font-size: 1rem;
+    border-radius: 20px 0 0 20px;
+    border: 1px solid #ddd;
+}
+
+.search-form .btn {
+    height: 40px;
+    border-radius: 0 20px 20px 0;
+    padding: 0 20px;
+}
+
+.search-form .fa-magnifying-glass {
+    color: white;
+    font-size: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .search-form {
+        order: 2;
+        width: 100%;
+        margin: 1rem 0;
+    }
+    
+    .navbar-collapse {
+        flex-direction: column;
+    }
+    
+    .navbar-nav {
+        order: 1;
+    }
+    
+    .navbar-nav.ms-auto {
+        order: 3;
+    }
+}

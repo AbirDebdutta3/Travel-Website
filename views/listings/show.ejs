@@ -46,7 +46,6 @@
           <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
 
             <fieldset class="starability-slot">
-              <legend>First rating:</legend>
               <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
                 aria-label="No rating." />
               <input type="radio" id="first-rate1" name="review[rating]" value="1" />
@@ -83,10 +82,15 @@
             <div class="card mb-3">
               <div class="card-body mt-2 mb-2 ms-3">
                 <h5>
-                  <%= review.author && review.author.username %>
+                  <%= review.author ? review.author.username : 'Anonymous' %>
+                  <% if(review.authorModel === 'Customer') { %>
+                    <span class="badge bg-info">Customer</span>
+                  <% } else if(review.authorModel === 'User') { %>
+                    <span class="badge bg-primary">Owner</span>
+                  <% } %>
                 </h5>
 
-                <p class="starability-result" data-rating="3">
+                <p class="starability-result" data-rating="<%= review.rating %>">
                   <%= review.rating %>
                 </p>
 
@@ -106,5 +110,6 @@
           <% } %>
         </div>
       </div>
+      
 
   </div>

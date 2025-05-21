@@ -5,6 +5,7 @@ const passport = require("passport");
 const { saveRedirectUrl } = require("../middleware.js");
 const userController = require("../controllers/user.js");
 
+// Owner Authentication Routes
 router.route("/signup")
     .get(userController.renderSignUpForm)
     .post(wrapAsync(userController.signUp));

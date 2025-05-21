@@ -14,7 +14,11 @@ const reviewSchema = new Schema({
     },
     author: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        refPath: 'authorModel'
+    },
+    authorModel: {
+        type: String,
+        enum: ['User', 'Customer']
     }
 });
 

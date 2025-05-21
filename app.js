@@ -13,12 +13,13 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const Customer = require("./models/customer.js");
 const MONGO_URL = 'mongodb://127.0.0.1:27017/wanderlust';
 const ExpressError = require("./utilis/ExpressError.js");
-
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/reviews.js");
 const userRouter = require("./routes/user.js");
+const customerRouter = require("./routes/customer.js");
 
 main().then(() => {
     console.log("connected to DB");
@@ -41,7 +42,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 const sessionOptions = {
     secret: "mysupersecretcode",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
         expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
         maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -54,10 +55,26 @@ app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// Configure passport strategies
+passport.use(new LocalStrategy(User.authenticate()));
+passport.use('customer', new LocalStrategy(Customer.authenticate()));
+
+// Serialize user
+passport.serializeUser((user, done) => {
+    done(null, { id: user._id, type: user.constructor.modelName });
+});
+
+// Deserialize user
+passport.deserializeUser(async (data, done) => {
+    try {
+        const Model = data.type === 'User' ? User : Customer;
+        const user = await Model.findById(data.id);
+        done(null, user);
+    } catch (err) {
+        done(err);
+    }
+});
 
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
@@ -67,9 +84,10 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use("/", userRouter);
+app.use("/customer", customerRouter);
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
-app.use("/", userRouter);
 
 app.get("/", (req, res) => {
     res.redirect("/listings");
