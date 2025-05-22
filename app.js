@@ -21,6 +21,7 @@ const reviewRouter = require("./routes/reviews.js");
 const userRouter = require("./routes/user.js");
 const customerRouter = require("./routes/customer.js");
 
+
 main().then(() => {
     console.log("connected to DB");
 }).catch((err) => {
@@ -88,6 +89,7 @@ app.use("/", userRouter);
 app.use("/customer", customerRouter);
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
+
 
 app.get("/", (req, res) => {
     res.redirect("/listings");

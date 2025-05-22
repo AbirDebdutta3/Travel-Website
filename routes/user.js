@@ -19,4 +19,7 @@ router.route("/login")
 
 router.get("/logout", userController.logout);
 
+// Email verification route
+router.get("/verify-email/:token", wrapAsync(userController.verifyEmail));
+
 module.exports = router; 

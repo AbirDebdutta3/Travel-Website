@@ -12,9 +12,13 @@ const customerSchema = new Schema({
         type: String,
         required: true,
         unique: true
+    },
+    role: {
+        type: String,
+        default: 'customer'
     }
 });
 
-customerSchema.plugin(passportLocalMongoose);
+customerSchema.plugin(passportLocalMongoose);// adds username and password fields to the schema
 
 module.exports = mongoose.model("Customer", customerSchema); 

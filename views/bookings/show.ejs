@@ -1,0 +1,40 @@
+<% layout('layouts/boilerplate') -%>
+
+<div class="container py-4">
+    <div class="booking-details mx-auto" style="max-width: 700px;">
+        <h1 class="mb-4 fw-bold text-danger">Booking Details</h1>
+        <div class="card shadow-sm rounded-4 mb-4">
+            <div class="card-body">
+                <h2 class="fw-bold text-danger mb-3"><%= booking.listing.title %></h2>
+                <div class="booking-info bg-light p-3 rounded mb-3">
+                    <p class="mb-2"><strong>Check-in:</strong> <%= new Date(booking.checkIn).toLocaleDateString() %></p>
+                    <p class="mb-2"><strong>Check-out:</strong> <%= new Date(booking.checkOut).toLocaleDateString() %></p>
+                    <p class="mb-2"><strong>Total Price:</strong> ₹<%= booking.totalPrice %></p>
+                    <p class="mb-0"><strong>Status:</strong> <span class="badge <%= booking.status === 'confirmed' ? 'bg-success' : 'bg-warning text-dark' %> px-3 py-2 fs-6"><%= booking.status.charAt(0).toUpperCase() + booking.status.slice(1) %></span></p>
+                </div>
+                <div class="listing-details mt-4">
+                    <h3 class="fw-bold">Listing Details</h3>
+                    <p><%= booking.listing.description %></p>
+                    <p><strong>Location:</strong> <%= booking.listing.location %></p>
+                    <p><strong>Price per night:</strong> ₹<%= booking.listing.price %></p>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="/listings" class="btn btn-outline-danger">Back to Listings</a>
+            <a href="/customer/bookings" class="btn btn-danger">View All Bookings</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.booking-details .card {
+  border: none;
+  box-shadow: 0 4px 16px rgba(231,76,60,0.08);
+  border-radius: 16px;
+  background: #fff;
+}
+.bg-light {
+  background: #f8f9fa !important;
+}
+</style>

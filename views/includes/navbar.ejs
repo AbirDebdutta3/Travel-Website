@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <!-- Brand Icon -->
         <a class="navbar-brand" href="/listings">
-            <i class="fa-solid fa-suitcase-rolling main-logo"></i>
+            <i class="fa-solid fa-suitcase-rolling main-logo"></i> <span style="font-family:  Plus Jakarta Sans, sans-serif; font-weight: bold;">Yatra Vibe</span>
         </a>
 
         <!-- Toggler -->
@@ -17,12 +17,12 @@
             <div class="navbar-nav me-auto">
                 <a class="nav-link" href="/listings">Explore</a>
                 <% if (currentUser && currentUser.constructor.modelName === 'User') { %>
-                    <a class="nav-link" href="/listings/new">Add Listing</a>
+                    <a class="nav-link" href="/listings/new"> Home</a>
                 <% } %>
             </div>
 
-            <!-- Search Bar - Available to all users -->
-            <% if(currentUser){ %>
+            <!-- Search Bar - Only on /listings index page -->
+            <% if(currentUser && currentPath === '/listings'){ %>
             <form class="d-flex mx-auto my-2 my-md-0 search-form" action="/listings/search" method="GET">
                 <div class="input-group">
                     <input class="form-control" type="search" name="q" 

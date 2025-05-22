@@ -1,0 +1,93 @@
+<div class="booking-form-container">
+    <form action="/customer/listings/<%= listing._id %>/book" method="POST" class="booking-form">
+        <div class="mb-3">
+            <label for="checkIn" class="form-label">Check-in Date:</label>
+            <input type="text" id="checkIn" name="checkIn" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="checkOut" class="form-label">Check-out Date:</label>
+            <input type="text" id="checkOut" name="checkOut" class="form-control" required>
+        </div>
+        <div class="price-summary mb-3 p-3 bg-light rounded">
+            <p class="mb-1">Price per night: ₹<%= listing.price %></p>
+            <p class="mb-1">Total nights: <span id="totalNights">0</span></p>
+            <p class="mb-1">Total price: ₹<span id="totalPrice">0</span></p>
+        </div>
+        <input type="hidden" name="totalPrice" id="totalPriceInput">
+        <button type="submit" class="btn btn-danger w-100 fw-bold">Book Now</button>
+    </form>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<style>
+.booking-form-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(231,76,60,0.08);
+    margin-bottom: 2rem;
+}
+.booking-form .form-control {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+.price-summary {
+    font-size: 1.1rem;
+}
+.btn-danger {
+    background: #e74c3c;
+    border: none;
+}
+.btn-danger:hover {
+    background: #c0392b;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const pricePerNight = Number('<%= listing.price %>');
+    const unavailableDates = JSON.parse('<%- JSON.stringify(listing.bookings || []) %>');
+    
+    const fp = flatpickr("#checkIn", {
+        minDate: "today",
+        dateFormat: "Y-m-d",
+        onChange: function(selectedDates) {
+            checkOutPicker.set("minDate", selectedDates[0]);
+            calculateTotal();
+        },
+        disable: unavailableDates.map(booking => ({
+            from: booking.checkIn,
+            to: booking.checkOut
+        }))
+    });
+
+    const checkOutPicker = flatpickr("#checkOut", {
+        minDate: "today",
+        dateFormat: "Y-m-d",
+        onChange: function() {
+            calculateTotal();
+        },
+        disable: unavailableDates.map(booking => ({
+            from: booking.checkIn,
+            to: booking.checkOut
+        }))
+    });
+
+    function calculateTotal() {
+        const checkIn = fp.selectedDates[0];
+        const checkOut = checkOutPicker.selectedDates[0];
+        
+        if (checkIn && checkOut) {
+            let nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+            if (nights <= 0) nights = 1; // Minimum 1 night
+            const total = nights * pricePerNight;
+            
+            document.getElementById('totalNights').textContent = nights;
+            document.getElementById('totalPrice').textContent = total;
+            document.getElementById('totalPriceInput').value = total;
+        }
+    }
+});
+</script> 

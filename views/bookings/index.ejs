@@ -1,0 +1,73 @@
+<% layout('layouts/boilerplate') -%>
+
+    <div class="container mt-5">
+        <h1>
+            <%= currentUser.username %>'s &nbsp; Bookings
+        </h1>
+
+        <% if(bookings.length===0) { %>
+            <div class="alert alert-info">
+                You haven't made any bookings yet.
+                <a href="/listings" class="alert-link">Browse listings</a>
+            </div>
+            <% } else { %>
+                <div class="row">
+                    <% bookings.forEach(booking=> { %>
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <%= booking.listing.title %>
+                                    </h5>
+                                    <div class="booking-info">
+                                        <p><strong>Check-in:</strong>
+                                            <%= new Date(booking.checkIn).toLocaleDateString() %>
+                                        </p>
+                                        <p><strong>Check-out:</strong>
+                                            <%= new Date(booking.checkOut).toLocaleDateString() %>
+                                        </p>
+                                        <p><strong>Total Price:</strong> ₹<%= booking.totalPrice %>
+                                        </p>
+                                        <p><strong>Status:</strong>
+                                            <span
+                                                class="badge bg-<%= booking.status === 'confirmed' ? 'success' : 'warning' %>">
+                                                <%= booking.status %>
+                                            </span>
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                </div>
+                <% } %>
+    </div>
+
+    <style>
+        .card {
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .booking-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .badge {
+            padding: 6px 10px;
+            border-radius: 4px;
+        }
+
+        .alert {
+            margin-top: 20px;
+        }
+    </style>

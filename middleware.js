@@ -38,6 +38,14 @@ module.exports.isLoggedIn = (req, res, next) => {
     next();
 };
 
+module.exports.isCustomer = (req, res, next) => {
+    if (!req.isAuthenticated() || req.user.role !== 'customer') {
+        req.flash("error", "You must be logged in as a customer to perform this action!");
+        return res.redirect("/listings");
+    }
+    next();
+};
+
 module.exports.isOwner = async (req, res, next) => {
     const { id } = req.params;
     const listing = await Listing.findById(id);

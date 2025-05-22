@@ -1,15 +1,32 @@
 const User = require("../models/user");
 const passport = require("passport");
 const { saveRedirectUrl } = require("../middleware.js");
+const { checkEmailExists } = require("../utilis/emailCheck.js");
+const { validateEmail } = require("../utilis/emailValidation.js");
 
 module.exports.renderSignUpForm =  (req, res) => { 
    // res.send("User Profile Page");
    res.render("./users/signup.ejs");
 };
 
-module.exports.signUp= async (req, res) => {
+module.exports.signUp= async (req, res, next) => {
    try {
       let { username, email, password } = req.body;
+      
+      // Validate email format
+      const emailValidation = validateEmail(email);
+      if (!emailValidation.isValid) {
+         req.flash("error", emailValidation.message);
+         return res.redirect("/signup");
+      }
+
+      // Check if email exists in either User or Customer model
+      const emailExists = await checkEmailExists(email);
+      if (emailExists) {
+         req.flash("error", "This email is already registered. Please use a different email.");
+         return res.redirect("/signup");
+      }
+
       const newUser = new User({ email, username });
       const registeredUser = await User.register(newUser, password);
       req.login(registeredUser, (err) => {
@@ -17,11 +34,11 @@ module.exports.signUp= async (req, res) => {
             return next(err);
          }
          req.flash("success", "Welcome to WanderLust!");
-         res.redirect(req.session.redirectUrl || "/listings"); // Redirect to the saved URL or default to "/listings"
+         res.redirect(req.session.redirectUrl || "/listings");
       });
    } catch (err) {
       console.error(err);
-      req.flash("error", "Something went wrong. Please try again. " , err.message);
+      req.flash("error", "Something went wrong. Please try again. " + err.message);
       res.redirect("/signup");
    }
 };
