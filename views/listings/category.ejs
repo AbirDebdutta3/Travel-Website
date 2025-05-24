@@ -1,0 +1,71 @@
+<%- layout('layouts/boilerplate') %>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold"><%= category.charAt(0).toUpperCase() + category.slice(1) %> Listings</h1>
+        <div class="btn-group">
+            <button type="button" class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Sort by Price
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item <%= currentSort === 'default' ? 'active' : '' %>" href="/listings/category/<%= category %>">Default</a></li>
+                <li><a class="dropdown-item <%= currentSort === 'price-asc' ? 'active' : '' %>" href="/listings/category/<%= category %>?sort=price-asc">Price: Low to High</a></li>
+                <li><a class="dropdown-item <%= currentSort === 'price-desc' ? 'active' : '' %>" href="/listings/category/<%= category %>?sort=price-desc">Price: High to Low</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <% if(listings && listings.length > 0) { %>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <% listings.forEach(function(listing) { %>
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
+                            <div class="position-relative">
+                                <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>" 
+                                    style="height: 250px; object-fit: cover; border-radius: 12px 12px 0 0;">
+                            </div>
+                            <div class="card-body p-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h5 class="card-title mb-1 fw-bold"><%= listing.title %></h5>
+                                </div>
+                                <p class="card-text text-muted mb-1"><%= listing.location %></p>
+                                <p class="card-text mb-0">
+                                    <strong>₹<%= listing.price %></strong> <span class="text-muted">night</span>
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <div class="alert alert-info shadow-sm">
+            No listings found in this category.
+        </div>
+    <% } %>
+</div>
+
+<style>
+.btn-outline-dark:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+.dropdown-item.active {
+    background-color: #000;
+}
+
+.dropdown-item:hover:not(.active) {
+    background-color: #f8f9fa;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var dropdownElementList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'));
+    dropdownElementList.forEach(function(dropdownToggleEl) {
+        new bootstrap.Dropdown(dropdownToggleEl);
+    });
+});
+</script>
