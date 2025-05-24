@@ -70,7 +70,7 @@ module.exports.login = [
         failureFlash: true,
     }),
     (req, res) => {
-        req.flash("success", "Welcome Back To Wanderlust");
+        req.flash("success", "Welcome Back To Yatra Vibe");
         // Only redirect to saved URL if it exists and is a GET route
         const redirectUrl = req.session.redirectUrl || "/listings";
         delete req.session.redirectUrl;

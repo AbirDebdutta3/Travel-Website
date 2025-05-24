@@ -40,10 +40,10 @@
             <div class="navbar-nav ms-auto">
                 <% if (!currentUser) { %>
                     <a class="nav-link" href="/customer/signup"><b>Customer SignUp</b></a>
-                    <a class="nav-link" href="/signup"><b>Owner SignUp</b></a>
+                    <a class="nav-link" href="/signup"><b>Admin SignUp</b></a>
                     <% if (currentPath !== '/login' && currentPath !== '/customer/login') { %>
                         <a class="nav-link" href="/customer/login"><b>Customer Login</b></a>
-                        <a class="nav-link" href="/login"><b>Owner Login</b></a>
+                        <a class="nav-link" href="/login"><b>Admin Login</b></a>
                     <% } %>
                 <% } else { %>
                     <a class="nav-link" href="/logout"><b>Logout</b></a>

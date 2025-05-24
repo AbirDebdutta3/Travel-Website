@@ -72,7 +72,7 @@ module.exports.login = [
         failureFlash: true,
     }),
     (req, res) => {
-        req.flash("success", "Welcome Back To Wanderlust");
+        req.flash("success", "Welcome Back To Yatra Vibe");
         const redirectUrl = req.session.redirectUrl || "/listings";
         delete req.session.redirectUrl;
         res.redirect(redirectUrl);
