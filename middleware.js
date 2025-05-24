@@ -55,3 +55,17 @@ module.exports.isOwner = async (req, res, next) => {
     }
     next();
 };
+
+module.exports.isVerified = async (req, res, next) => {
+    if (!req.user) {
+        req.flash("error", "You must be logged in!");
+        return res.redirect("/login");
+    }
+    
+    if (!req.user.isVerified) {
+        req.flash("error", "Please verify your email before logging in.");
+        return res.redirect(`/verify?email=${req.user.email}&userType=${req.user.role || 'user'}`);
+    }
+    
+    next();
+};

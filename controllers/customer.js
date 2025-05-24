@@ -5,6 +5,7 @@ const passport = require("passport");
 const { saveRedirectUrl } = require("../middleware.js");
 const { checkEmailExists } = require("../utilis/emailCheck.js");
 const { validateEmail } = require("../utilis/emailValidation.js");
+const { generateOTP, sendOTPEmail } = require("../utilis/otpUtils");
 const nodemailer = require("nodemailer");
 
 module.exports.renderSignUpForm = (req, res) => {
@@ -22,22 +23,37 @@ module.exports.signUp = async (req, res, next) => {
             return res.redirect("/customer/signup");
         }
 
-        // Check if email exists in either User or Customer model
-        const emailExists = await checkEmailExists(email);
-        if (emailExists) {
-            req.flash("error", "This email is already registered. Please use a different email.");
+        // Check if email exists in Customer model only
+        const existingCustomer = await Customer.findOne({ email });
+        if (existingCustomer) {
+            req.flash("error", "This email is already registered as a customer. Please use a different email.");
             return res.redirect("/customer/signup");
         }
 
-        const newCustomer = new Customer({ email, username });
-        const registeredCustomer = await Customer.register(newCustomer, password);
-        req.login(registeredCustomer, (err) => {
-            if (err) {
-                return next(err);
-            }
-            req.flash("success", "Welcome to WanderLust!");
-            res.redirect(req.session.redirectUrl || "/listings");
+        // Generate OTP
+        const otp = generateOTP();
+        const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+        const newCustomer = new Customer({ 
+            email, 
+            username,
+            otp,
+            otpExpiry,
+            isVerified: false
         });
+        
+        const registeredCustomer = await Customer.register(newCustomer, password);
+
+        // Send OTP email
+        const emailSent = await sendOTPEmail(email, otp);
+        if (!emailSent) {
+            await Customer.findByIdAndDelete(registeredCustomer._id);
+            req.flash("error", "Failed to send verification email. Please try again.");
+            return res.redirect("/customer/signup");
+        }
+
+        // Redirect to verification page
+        res.redirect(`/verify?email=${email}&userType=customer`);
     } catch (err) {
         console.error(err);
         req.flash("error", "Something went wrong. Please try again. " + err.message);

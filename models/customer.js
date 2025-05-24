@@ -16,6 +16,18 @@ const customerSchema = new Schema({
     role: {
         type: String,
         default: 'customer'
+    },
+    otp: {
+        type: String,
+        default: null
+    },
+    otpExpiry: {
+        type: Date,
+        default: null
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
     }
 });
 

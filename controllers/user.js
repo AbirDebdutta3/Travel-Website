@@ -3,6 +3,7 @@ const passport = require("passport");
 const { saveRedirectUrl } = require("../middleware.js");
 const { checkEmailExists } = require("../utilis/emailCheck.js");
 const { validateEmail } = require("../utilis/emailValidation.js");
+const { generateOTP, sendOTPEmail } = require("../utilis/otpUtils");
 
 module.exports.renderSignUpForm =  (req, res) => { 
    // res.send("User Profile Page");
@@ -20,22 +21,37 @@ module.exports.signUp= async (req, res, next) => {
          return res.redirect("/signup");
       }
 
-      // Check if email exists in either User or Customer model
-      const emailExists = await checkEmailExists(email);
-      if (emailExists) {
-         req.flash("error", "This email is already registered. Please use a different email.");
+      // Check if email exists in User model only
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+         req.flash("error", "This email is already registered as an owner. Please use a different email.");
          return res.redirect("/signup");
       }
 
-      const newUser = new User({ email, username });
-      const registeredUser = await User.register(newUser, password);
-      req.login(registeredUser, (err) => {
-         if (err) {
-            return next(err);
-         }
-         req.flash("success", "Welcome to WanderLust!");
-         res.redirect(req.session.redirectUrl || "/listings");
+      // Generate OTP
+      const otp = generateOTP();
+      const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+      const newUser = new User({ 
+         email, 
+         username,
+         otp,
+         otpExpiry,
+         isVerified: false
       });
+      
+      const registeredUser = await User.register(newUser, password);
+
+      // Send OTP email
+      const emailSent = await sendOTPEmail(email, otp);
+      if (!emailSent) {
+         await User.findByIdAndDelete(registeredUser._id);
+         req.flash("error", "Failed to send verification email. Please try again.");
+         return res.redirect("/signup");
+      }
+
+      // Redirect to verification page
+      res.redirect(`/verify?email=${email}&userType=user`);
    } catch (err) {
       console.error(err);
       req.flash("error", "Something went wrong. Please try again. " + err.message);
