@@ -11,8 +11,10 @@ const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
-const passport = require("passport");
-const LocalStrategy = require("passport-local");
+const passport = require("passport");//	The core framework and method: passport.authenticate()
+// passport as the authentication engine
+// passport-local as one plug-in module for username/password login
+const LocalStrategy = require("passport-local");//	A strategy for local username/password authentication: LocalStrategy
 const User = require("./models/user.js");
 const Customer = require("./models/customer.js");
 const ExpressError = require("./utilis/ExpressError.js");
@@ -57,34 +59,36 @@ store.on ("error", ()=>{
 });
 
 const sessionOptions = {
-    store,
-    secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: false,
+    store,                      // A session store (e.g., MongoDB session store)
+    secret: process.env.SECRET, // Secret used to sign session ID cookies
+    resave: false,              // Don't resave session if nothing changed
+    saveUninitialized: false,   // Don't save empty sessions
     cookie: {
-        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        httpOnly: true
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // Absolute expiration
+        maxAge: 7 * 24 * 60 * 60 * 1000,               // Relative expiration (7 days)
+        httpOnly: true         // Prevents client-side JavaScript from accessing the cookie and	Makes cookies inaccessible to JS running in the browser.
     }
 };
 
-app.use(session(sessionOptions));
+
+app.use(session(sessionOptions)); // Session middleware (stores login sessions)
 app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Configure passport strategies
-passport.use(new LocalStrategy(User.authenticate()));
-passport.use('customer', new LocalStrategy(Customer.authenticate()));
+passport.use(new LocalStrategy(User.authenticate()));//Default: "local" → for normal User
+passport.use('customer', new LocalStrategy(Customer.authenticate()));//"customer" → for Customer model
 
 // Serialize user
 passport.serializeUser((user, done) => {
-    done(null, { id: user._id, type: user.constructor.modelName });
+    done(null, { id: user._id, type: user.constructor.modelName }); //
 });
-
+// serializeUser = Save the user’s ID and type on a little piece of paper (session cookie).
+// deserializeUser = Every time the user visits, use that piece of paper to find the full user profile in your database.
 // Deserialize user
-passport.deserializeUser(async (data, done) => {
+passport.deserializeUser(async (data, done) => { 
     try {
         const Model = data.type === 'User' ? User : Customer;
         const user = await Model.findById(data.id);

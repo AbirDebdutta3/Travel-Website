@@ -57,12 +57,14 @@ module.exports.isOwner = async (req, res, next) => {
 };
 
 module.exports.isVerified = async (req, res, next) => {
-    if (!req.user) {
+    if (!req.user) { // All Thanks Passport-local
         req.flash("error", "You must be logged in!");
         return res.redirect("/login");
     }
-    
-    if (!req.user.isVerified) {
+     //If isVerified = false → !false = true → user is not verified, so the app blocks access
+
+     //     If isVerified = true → !true = false → user is verified → allowed to proceed
+    if (!req.user.isVerified) { 
         req.flash("error", "Please verify your email before logging in.");
         return res.redirect(`/verify?email=${req.user.email}&userType=${req.user.role || 'user'}`);
     }

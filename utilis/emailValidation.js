@@ -1,4 +1,11 @@
 const validateEmail = (email) => {
+//     ^                          // Start of string
+// [a-zA-Z0-9._-]+            // Username part (e.g., john.doe123)
+// @                          // The "@" symbol
+// [a-zA-Z0-9.-]+             // Domain name (e.g., gmail, yatra-vibe, etc.)
+// \.                         // A literal dot "."
+// [a-zA-Z]{2,6}              // Top-level domain (TLD) like com, net, org (2 to 6 letters)
+// $                          // End of string
     // Regular expression for email validation
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     
@@ -24,7 +31,7 @@ const validateEmail = (email) => {
         'tempmail.net'
     ];
 
-    const domain = email.split('@')[1].toLowerCase();
+    const domain = email.split('@')[1].toLowerCase(); //This line takes the domain part of the email (i.e., the part after the @ symbol).
     if (disposableDomains.includes(domain)) {
         return {
             isValid: false,

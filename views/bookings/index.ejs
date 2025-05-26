@@ -17,7 +17,7 @@
                             <div class="card h-100">
                                 <div class="card-body">
                                     <h5 class="card-title">
-                                        <%= booking.listing.title %>
+                                        <%= booking.listing ? booking.listing.title : 'Listing no longer available' %>
                                     </h5>
                                     <div class="booking-info">
                                         <p><strong>Check-in:</strong>
