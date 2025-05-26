@@ -61,12 +61,14 @@ store.on ("error", ()=>{
 const sessionOptions = {
     store,                      // A session store (e.g., MongoDB session store)
     secret: process.env.SECRET, // Secret used to sign session ID cookies
-    resave: false,              // Don't resave session if nothing changed
-    saveUninitialized: false,   // Don't save empty sessions
+    resave: true,              // Resave session even if nothing changed
+    saveUninitialized: true,   // Save empty sessions
     cookie: {
         expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // Absolute expiration
         maxAge: 7 * 24 * 60 * 60 * 1000,               // Relative expiration (7 days)
-        httpOnly: true         // Prevents client-side JavaScript from accessing the cookie and	Makes cookies inaccessible to JS running in the browser.
+        httpOnly: true,        // Prevents client-side JavaScript from accessing the cookie
+        secure: process.env.NODE_ENV === "production",  // Only send cookie over HTTPS in production
+        sameSite: 'lax'        // Protects against CSRF while allowing cross-site requests
     }
 };
 
@@ -85,7 +87,7 @@ passport.use('customer', new LocalStrategy(Customer.authenticate()));//"customer
 passport.serializeUser((user, done) => {
     done(null, { id: user._id, type: user.constructor.modelName }); //
 });
-// serializeUser = Save the user’s ID and type on a little piece of paper (session cookie).
+// serializeUser = Save the user's ID and type on a little piece of paper (session cookie).
 // deserializeUser = Every time the user visits, use that piece of paper to find the full user profile in your database.
 // Deserialize user
 passport.deserializeUser(async (data, done) => { 
