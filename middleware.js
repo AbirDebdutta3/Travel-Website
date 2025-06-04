@@ -22,7 +22,9 @@ module.exports.validateReview = (req, res, next) => {
     }
 };
 
-module.exports.saveRedirectUrl = (req, res, next) => {
+module.exports.saveRedirectUrl = (req, res, next) => { //Checks if a redirect URL was saved earlier in the session (e.g., when a user tried to access a protected page).
+
+//If found, it copies it into res.locals.redirectUrl, which is accessible in EJS templates or the next route handler.
     if (req.session.redirectUrl) {
         res.locals.redirectUrl = req.session.redirectUrl;
     }
