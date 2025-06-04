@@ -71,7 +71,7 @@ const sessionOptions = {
         sameSite: 'lax'        // Protects against CSRF while allowing cross-site requests
     }
 };
-
+app.set('trust proxy', 1);
 
 app.use(session(sessionOptions)); // Session middleware (stores login sessions)
 app.use(flash());
